@@ -1,8 +1,8 @@
 {
-  "name": "mi-proyecto",
+  "name": "my-notes",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Esteban Carrasco",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
