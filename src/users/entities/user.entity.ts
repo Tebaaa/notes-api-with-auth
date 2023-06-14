@@ -1,9 +1,10 @@
 import { Column, Entity } from 'typeorm';
 
 import { BaseEntity } from '@Core/entities';
+import { IUser } from '../interfaces';
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends BaseEntity implements IUser {
   @Column()
   firstName: string;
 
