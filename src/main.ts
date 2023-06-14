@@ -5,6 +5,7 @@ import * as morgan from 'morgan';
 
 import { AppModule } from './app.module';
 import { API_PREFIX, CORS } from './constants';
+import { setupSwaggerDoc } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +20,8 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
+  if (process.env.NODE_ENV !== 'production') setupSwaggerDoc(app);
 
   const configService = app.get(ConfigService);
   await app.listen(configService.get<number>('PORT'));
