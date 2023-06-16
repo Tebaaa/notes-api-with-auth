@@ -16,7 +16,7 @@ export class User extends BaseEntity implements IUser {
   lastName: string;
 
   @Column({ unique: true })
-  userName: string;
+  username: string;
 
   @Column({ unique: true })
   email: string;
