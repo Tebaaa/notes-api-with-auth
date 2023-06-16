@@ -1,6 +1,4 @@
-import { BaseEntity } from '@Core/entities';
-
-export interface IUser extends BaseEntity {
+export interface IUser {
   firstName: string;
   secondName: string;
   lastName: string;
