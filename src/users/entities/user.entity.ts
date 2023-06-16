@@ -1,6 +1,7 @@
 import { Column, Entity } from 'typeorm';
 
 import { BaseEntity } from '@Core/entities';
+
 import { IUser } from '../interfaces';
 
 @Entity()
