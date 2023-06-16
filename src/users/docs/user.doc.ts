@@ -10,7 +10,7 @@ export class UserDoc implements Partial<IUser> {
 
   @ApiProperty()
   @Expose()
-  userName: string;
+  username: string;
 
   @ApiProperty()
   @Expose()
