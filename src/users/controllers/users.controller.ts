@@ -10,14 +10,17 @@ import {
 } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 
-import { PaginationDto } from '@Core/dtos';
-import { MultipleResponseDoc } from '@Core/docs';
-import { serializeMultipleResponse } from '@Core/utils';
+import {
+  serializeMultipleResponse,
+  serializeSingleResponse,
+} from '@Core/utils';
+import { IdParamDto, PaginationDto } from '@Core/dtos';
+import { MultipleResponseDoc, SingleResponseDoc } from '@Core/docs';
+import { ApiPaginatedResponse, ApiSingleResponse } from '@Core/decorators';
 
 import { CreateUserDto, UpdateUserDto } from '../dto';
 import { UsersService } from '../services';
 import { UserDoc } from '../docs';
-import { ApiPaginatedResponse } from '@Core/decorators';
 
 @Controller('users')
 export class UsersController {
@@ -41,9 +44,17 @@ export class UsersController {
     return serializeMultipleResponse(UserDoc, users, pagination, total);
   }
 
+  @ApiSingleResponse(UserDoc)
+  @ApiOperation({
+    description: 'Use this endpoint to find a user by a given ID',
+    summary: 'Get user by ID',
+  })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOneById(id);
+  async findOne(
+    @Param('id') id: IdParamDto,
+  ): Promise<SingleResponseDoc<UserDoc>> {
+    const user = await this.usersService.findOneById(id.id);
+    return serializeSingleResponse(UserDoc, user);
   }
 
   @Patch(':id')

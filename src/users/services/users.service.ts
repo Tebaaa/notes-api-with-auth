@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PaginationDto } from '@Core/dtos';
 
@@ -18,9 +18,12 @@ export class UsersService {
     return 'This action adds a new user';
   }
 
-  async findOneById(id: string) {
+  async findOneById(id: string): Promise<User> {
     const user = await this.usersRepository.findOneById(id);
-    return `This action returns a #${id} user`;
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
