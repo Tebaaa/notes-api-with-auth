@@ -8,7 +8,7 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
   serializeMultipleResponse,
@@ -22,13 +22,22 @@ import { CreateUserDto, UpdateUserDto } from '../dto';
 import { UsersService } from '../services';
 import { UserDoc } from '../docs';
 
+@ApiTags('User management endpoints')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiSingleResponse(UserDoc)
+  @ApiOperation({
+    description: 'Use this endpoint to create an user',
+    summary: 'Create user',
+  })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<SingleResponseDoc<UserDoc>> {
+    const user = await this.usersService.create(createUserDto);
+    return serializeSingleResponse(UserDoc, user);
   }
 
   @ApiPaginatedResponse(UserDoc)
