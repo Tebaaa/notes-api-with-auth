@@ -9,8 +9,8 @@ export class User extends BaseEntity implements IUser {
   @Column()
   firstName: string;
 
-  @Column()
-  secondName: string;
+  @Column({ nullable: true })
+  secondName?: string;
 
   @Column()
   lastName: string;
