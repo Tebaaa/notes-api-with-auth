@@ -3,12 +3,15 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { IUser } from '../interfaces';
+import { IsEqualTo } from '../decorators';
+import { PASSWORD_MESSAGE, PASSWORD_REGEX } from '../constants';
 
 export class CreateUserDto implements IUser {
   @ApiProperty()
@@ -41,5 +44,12 @@ export class CreateUserDto implements IUser {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  @Matches(PASSWORD_REGEX, { message: PASSWORD_MESSAGE })
   password: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsEqualTo('password')
+  confirmPassword: string;
 }
