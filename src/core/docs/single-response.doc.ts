@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SingleResponse<T> {
+export class SingleResponseDoc<T> {
   @ApiProperty()
   data: T;
 }
