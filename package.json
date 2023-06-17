@@ -39,6 +39,7 @@
     "typeorm": "^0.3.16"
   },
   "devDependencies": {
+    "@golevelup/ts-jest": "^0.3.7",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/config": "^2.3.3",
     "@nestjs/schematics": "^9.0.0",
@@ -80,6 +81,14 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePaths": [
+      "<rootDir>"
+    ],
+    "moduleNameMapper": {
+      "@/(.*)": "<rootDir>/src/$1",
+      "@Core/(.*)": "<rootDir>/core/$1",
+      "@Users/(.*)": "<rootDir>/users/$1"
+    }
   }
 }
