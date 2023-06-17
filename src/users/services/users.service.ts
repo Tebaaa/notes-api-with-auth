@@ -52,13 +52,15 @@ export class UsersService {
     return this.usersRepository.findOneByUsername(username);
   }
 
-  update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = this.findOneById(id);
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.findOneById(id);
     const updatedUser = { ...user, ...updateUserDto };
     return this.usersRepository.save(updatedUser);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findOneById(id);
+    this.usersRepository.remove(user);
+    return;
   }
 }

@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Query,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -27,11 +29,12 @@ import { UserDoc } from '../docs';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiSingleResponse(UserDoc)
+  @ApiSingleResponse(UserDoc, HttpStatus.CREATED)
   @ApiOperation({
     description: 'Use this endpoint to create an user',
     summary: 'Create user',
   })
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   async create(
     @Body() createUserDto: CreateUserDto,
@@ -80,8 +83,9 @@ export class UsersController {
     return serializeSingleResponse(UserDoc, user);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: IdParamDto): Promise<void> {
+    return await this.usersService.remove(id.id);
   }
 }
