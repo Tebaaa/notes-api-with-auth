@@ -88,7 +88,8 @@
     "moduleNameMapper": {
       "@/(.*)": "<rootDir>/src/$1",
       "@Core/(.*)": "<rootDir>/core/$1",
-      "@Users/(.*)": "<rootDir>/users/$1"
+      "@Users/(.*)": "<rootDir>/users/$1",
+      "@Auth/(.*)": "<rootDir>/auth/$1"
     }
   }
 }
