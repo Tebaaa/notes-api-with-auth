@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import * as morgan from 'morgan';
 
+import { API_PREFIX, CORS } from '@Core/constants';
+import { setupSwaggerDoc } from '@Core/config';
+
 import { AppModule } from './app.module';
-import { API_PREFIX, CORS } from './constants';
-import { setupSwaggerDoc } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
