@@ -52,8 +52,10 @@ export class UsersService {
     return this.usersRepository.findOneByUsername(username);
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = this.findOneById(id);
+    const updatedUser = { ...user, ...updateUserDto };
+    return this.usersRepository.save(updatedUser);
   }
 
   remove(id: string) {

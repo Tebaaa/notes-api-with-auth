@@ -66,9 +66,18 @@ export class UsersController {
     return serializeSingleResponse(UserDoc, user);
   }
 
+  @ApiSingleResponse(UserDoc)
+  @ApiOperation({
+    description: 'Use this endpoint to update a user by a given ID',
+    summary: 'Update user',
+  })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(
+    @Param('id') id: IdParamDto,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<SingleResponseDoc<UserDoc>> {
+    const user = await this.usersService.update(id.id, updateUserDto);
+    return serializeSingleResponse(UserDoc, user);
   }
 
   @Delete(':id')
