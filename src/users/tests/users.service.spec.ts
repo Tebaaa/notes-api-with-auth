@@ -1,12 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from '../services/users.service';
-import { UsersRepository } from '@Users/repositories';
-import { DeepMocked, createMock } from '@golevelup/ts-jest';
-import { describe } from 'node:test';
-import { User } from '@Users/entities';
-import { PaginationDto } from '@Core/dtos';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from '@Users/dto';
+import { DeepMocked, createMock } from '@golevelup/ts-jest';
+import { Test, TestingModule } from '@nestjs/testing';
+import { describe } from 'node:test';
+
+import { PaginationDto } from '@Core/dtos';
+
+import { CreateUserDto, UpdateUserDto } from '../dto';
+import { UsersRepository } from '../repositories';
+import { UsersService } from '../services';
+import { User } from '../entities';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -34,7 +36,9 @@ describe('UsersService', () => {
   describe('findAll', () => {
     it('should return all users', async () => {
       const expectedReturn = createMock<Promise<[User[], number]>>();
+
       usersRepository.findAll.mockResolvedValueOnce(expectedReturn);
+
       const returnedValue = await service.findAll(createMock<PaginationDto>());
       expect(returnedValue).toEqual(expectedReturn);
     });
@@ -55,8 +59,11 @@ describe('UsersService', () => {
       it('should return user with id', async () => {
         const fakeid = 'fakeid';
         const expectedUser = createMock<User>({ id: fakeid });
+
         usersRepository.findOneById.mockResolvedValueOnce(expectedUser);
+
         const returnedValue = await service.findOneById('fakeid');
+
         expect(returnedValue.id).toEqual(expectedUser.id);
         expect(returnedValue).toEqual(expectedUser);
       });
@@ -95,8 +102,11 @@ describe('UsersService', () => {
       it('should create an user', async () => {
         usersRepository.findOneByEmail.mockResolvedValueOnce(undefined);
         usersRepository.findOneByUsername.mockResolvedValueOnce(undefined);
+
         const expectedReturn = createMock<Promise<User>>();
+
         usersRepository.save.mockResolvedValueOnce(expectedReturn);
+
         const returnedValue = await service.create(createMock<CreateUserDto>());
         expect(returnedValue).toEqual(expectedReturn);
       });
@@ -107,6 +117,7 @@ describe('UsersService', () => {
     describe('when user is not found', () => {
       it('should throw a NotFoundException', async () => {
         usersRepository.findOneById.mockResolvedValueOnce(undefined);
+
         try {
           await service.update('fakeId', createMock<UpdateUserDto>());
         } catch (error) {
