@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -20,7 +19,7 @@ import { IdParamDto, PaginationDto } from '@Core/dtos';
 import { MultipleResponseDoc, SingleResponseDoc } from '@Core/docs';
 import { ApiPaginatedResponse, ApiSingleResponse } from '@Core/decorators';
 
-import { CreateUserDto, UpdateUserDto } from '../dto';
+import { UpdateUserDto } from '../dto';
 import { UsersService } from '../services';
 import { UserDoc } from '../docs';
 
@@ -28,20 +27,6 @@ import { UserDoc } from '../docs';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @ApiSingleResponse(UserDoc, HttpStatus.CREATED)
-  @ApiOperation({
-    description: 'Use this endpoint to create an user',
-    summary: 'Create user',
-  })
-  @HttpCode(HttpStatus.CREATED)
-  @Post()
-  async create(
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<SingleResponseDoc<UserDoc>> {
-    const user = await this.usersService.create(createUserDto);
-    return serializeSingleResponse(UserDoc, user);
-  }
 
   @ApiPaginatedResponse(UserDoc)
   @ApiOperation({
