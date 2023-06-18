@@ -3,6 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmail } from 'class-validator';
 import { compare } from 'bcrypt';
 
+import { CreateUserDto } from '@Users/dto';
 import { User } from '@Users/entities';
 
 import { LoginDto } from '../dto';
@@ -32,5 +33,13 @@ export class AuthService {
       throw new UnauthorizedException('Password is incorrect');
     }
     return loggedInUser;
+  }
+
+  async register(createUserDto: CreateUserDto): Promise<User> {
+    const [createdUser] = await this.eventEmitter.emitAsync(
+      'createUser',
+      createUserDto,
+    );
+    return createdUser;
   }
 }
