@@ -1,3 +1,4 @@
+import { CreateUserDto } from '@Users/dto';
 import { User } from '@Users/entities';
 import { UsersService } from '@Users/services';
 import { Injectable } from '@nestjs/common';
@@ -21,5 +22,13 @@ export class UserListener implements Partial<UsersService> {
       throw new Error('No username provided');
     }
     return await this.usersService.findOneByUsername(username);
+  }
+
+  @OnEvent('createUser')
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    if (!createUserDto) {
+      throw new Error('No createUserDto provided');
+    }
+    return await this.usersService.create(createUserDto);
   }
 }
