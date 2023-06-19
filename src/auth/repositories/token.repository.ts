@@ -10,4 +10,11 @@ export class TokenRepository extends Repository<Token> {
   ) {
     super(repository.target, repository.manager, repository.queryRunner);
   }
+
+  getByRefreshToken(refreshToken: string): Promise<Token> {
+    return this.repository.findOne({
+      where: { refreshToken },
+      relations: ['user'],
+    });
+  }
 }
