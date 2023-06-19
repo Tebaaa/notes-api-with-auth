@@ -6,6 +6,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { sign, verify, JwtPayload } from 'jsonwebtoken';
+import { Request } from 'express';
 
 import { User } from '@Users/entities';
 
@@ -92,5 +93,17 @@ export class TokenService {
 
     await this.tokenRepository.delete({ id: token.id });
     return this.persistTokens(user);
+  }
+
+  getTokenFromBearer(req: Request): string {
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+      throw new UnauthorizedException('Bearer not provided');
+    }
+    return authorization.split(' ')[1];
+  }
+
+  async getDBTokenByAccessToken(accessToken: string): Promise<Token> {
+    return this.tokenRepository.getByAccessToken(accessToken);
   }
 }
