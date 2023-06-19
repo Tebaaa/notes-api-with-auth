@@ -12,7 +12,7 @@ import { CreateUserDto } from '@Users/dto';
 import { User } from '@Users/entities';
 
 import { LoginDto } from '../dto';
-import { LoginInfoDoc } from '../docs';
+import { LoginInfoDoc, TokenDoc } from '../docs';
 import { TokenService } from '.';
 
 @Injectable()
@@ -54,5 +54,13 @@ export class AuthService {
       createUserDto,
     );
     return createdUser;
+  }
+
+  async refreshToken(token: string): Promise<TokenDoc> {
+    this.tokenService.verifyRefreshToken(token);
+    const { accessToken, refreshToken } = await this.tokenService.refreshTokens(
+      token,
+    );
+    return { accessToken, refreshToken };
   }
 }

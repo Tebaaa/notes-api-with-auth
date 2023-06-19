@@ -1,7 +1,11 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { sign } from 'jsonwebtoken';
+import { sign, verify, JwtPayload } from 'jsonwebtoken';
 
 import { User } from '@Users/entities';
 
@@ -66,5 +70,27 @@ export class TokenService {
     });
 
     return this.tokenRepository.save(newToken);
+  }
+
+  verifyRefreshToken(token: string): string | JwtPayload {
+    const secret = this.configService.get('REFRESH_TOKEN_SECRET');
+    try {
+      return verify(token, secret);
+    } catch {
+      throw new UnauthorizedException('Invalid Token');
+    }
+  }
+
+  async refreshTokens(refreshToken: string): Promise<Token> {
+    const token = await this.tokenRepository.getByRefreshToken(refreshToken);
+    //TODO: check if token is in blacklist
+    if (!token) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    console.log(token);
+    const { user } = token;
+
+    await this.tokenRepository.delete({ id: token.id });
+    return this.persistTokens(user);
   }
 }

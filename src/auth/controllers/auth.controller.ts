@@ -8,14 +8,15 @@ import { UserDoc } from '@Users/docs';
 import { CreateUserDto } from '@Users/dto';
 
 import { AuthService } from '../services';
-import { LoginDto } from '../dto';
-import { LoginInfoDoc } from '@Auth/docs';
+import { LoginDto, RefreshTokenDto } from '../dto';
+import { LoginInfoDoc, TokenDoc } from '../docs';
 
 @ApiTags('Authentication endpoints')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  //TODO: Implement local passport
   @ApiSingleResponse(LoginInfoDoc)
   @ApiOperation({
     description: 'User this endpoint to authenticate',
@@ -42,4 +43,21 @@ export class AuthController {
     const user = await this.authService.register(createUserDto);
     return serializeSingleResponse(UserDoc, user);
   }
+
+  @ApiOperation({
+    description: 'Use this endpoint if you want to refresh your access token',
+    summary: 'Refresh access token',
+  })
+  @ApiSingleResponse(TokenDoc)
+  @Post('refresh-token')
+  async refreshToken(
+    @Body() refreshTokenDto: RefreshTokenDto,
+  ): Promise<SingleResponseDoc<TokenDoc>> {
+    const tokens = await this.authService.refreshToken(
+      refreshTokenDto.refreshToken,
+    );
+    return serializeSingleResponse(TokenDoc, tokens);
+  }
+
+  //TODO: Create logout :)
 }
