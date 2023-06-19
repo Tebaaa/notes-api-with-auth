@@ -17,4 +17,11 @@ export class TokenRepository extends Repository<Token> {
       relations: ['user'],
     });
   }
+
+  getByAccessToken(accessToken: string): Promise<Token> {
+    return this.repository.findOne({
+      where: { accessToken },
+      relations: ['user'],
+    });
+  }
 }
