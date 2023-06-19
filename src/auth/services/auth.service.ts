@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnauthorizedException,
+  forwardRef,
+} from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmail } from 'class-validator';
 import { compare } from 'bcrypt';
@@ -7,12 +12,18 @@ import { CreateUserDto } from '@Users/dto';
 import { User } from '@Users/entities';
 
 import { LoginDto } from '../dto';
+import { LoginInfoDoc } from '../docs';
+import { TokenService } from '.';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(
+    @Inject(forwardRef(() => TokenService))
+    private readonly tokenService: TokenService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
-  async login({ user, password }: LoginDto): Promise<User> {
+  async login({ user, password }: LoginDto): Promise<LoginInfoDoc> {
     let loggedInUser: unknown;
     if (isEmail(user)) {
       [loggedInUser] = await this.eventEmitter.emitAsync(
@@ -32,7 +43,9 @@ export class AuthService {
     if (!correctPassword) {
       throw new UnauthorizedException('Password is incorrect');
     }
-    return loggedInUser;
+
+    const token = await this.tokenService.persistTokens(loggedInUser);
+    return { user: loggedInUser, tokens: token };
   }
 
   async register(createUserDto: CreateUserDto): Promise<User> {

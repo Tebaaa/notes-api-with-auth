@@ -5,25 +5,28 @@ import { serializeSingleResponse } from '@Core/utils';
 import { SingleResponseDoc } from '@Core/docs';
 import { ApiSingleResponse } from '@Core/decorators';
 import { UserDoc } from '@Users/docs';
+import { CreateUserDto } from '@Users/dto';
 
 import { AuthService } from '../services';
 import { LoginDto } from '../dto';
-import { CreateUserDto } from '@Users/dto';
+import { LoginInfoDoc } from '@Auth/docs';
 
 @ApiTags('Authentication endpoints')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @ApiSingleResponse(UserDoc)
+  @ApiSingleResponse(LoginInfoDoc)
   @ApiOperation({
     description: 'User this endpoint to authenticate',
     summary: 'Login',
   })
   @Post('login')
-  async login(@Body() loginDto: LoginDto): Promise<SingleResponseDoc<UserDoc>> {
-    const user = await this.authService.login(loginDto);
-    return serializeSingleResponse(UserDoc, user);
+  async login(
+    @Body() loginDto: LoginDto,
+  ): Promise<SingleResponseDoc<LoginInfoDoc>> {
+    const loginInfo = await this.authService.login(loginDto);
+    return serializeSingleResponse(LoginInfoDoc, loginInfo);
   }
 
   @ApiSingleResponse(UserDoc, HttpStatus.CREATED)
