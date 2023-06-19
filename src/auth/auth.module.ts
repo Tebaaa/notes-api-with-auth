@@ -8,6 +8,7 @@ import { AuthController } from './controllers';
 import { AuthService, TokenService } from './services';
 import { Token } from './entities';
 import { TokenRepository } from './repositories';
+import { JwtStrategy } from './strategies';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { TokenRepository } from './repositories';
     TypeOrmModule.forFeature([Token]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, TokenService, TokenRepository],
+  providers: [AuthService, TokenService, TokenRepository, JwtStrategy],
 })
 export class AuthModule {}
