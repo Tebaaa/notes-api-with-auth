@@ -8,8 +8,9 @@ import {
   Query,
   HttpStatus,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
   serializeMultipleResponse,
@@ -18,11 +19,14 @@ import {
 import { IdParamDto, PaginationDto } from '@Core/dtos';
 import { MultipleResponseDoc, SingleResponseDoc } from '@Core/docs';
 import { ApiPaginatedResponse, ApiSingleResponse } from '@Core/decorators';
+import { JwtAuthGuard } from '@Auth/guards';
 
 import { UpdateUserDto } from '../dto';
 import { UsersService } from '../services';
 import { UserDoc } from '../docs';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('User management endpoints')
 @Controller('users')
 export class UsersController {
