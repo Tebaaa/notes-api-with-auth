@@ -1,5 +1,19 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Request } from 'express';
 
 import { serializeSingleResponse } from '@Core/utils';
 import { SingleResponseDoc } from '@Core/docs';
@@ -59,5 +73,15 @@ export class AuthController {
     return serializeSingleResponse(TokenDoc, tokens);
   }
 
-  //TODO: Create logout :)
+  @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  @ApiBearerAuth()
+  @ApiOperation({
+    description: 'Use this endpoint to logout',
+    summary: 'Logout',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('logout')
+  async logout(@Req() req: Request): Promise<void> {
+    await this.authService.logout(req);
+  }
 }

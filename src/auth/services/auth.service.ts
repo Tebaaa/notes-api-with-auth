@@ -1,12 +1,14 @@
 import {
   Inject,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
   forwardRef,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmail } from 'class-validator';
 import { compare } from 'bcrypt';
+import { Request } from 'express';
 
 import { CreateUserDto } from '@Users/dto';
 import { User } from '@Users/entities';
@@ -62,5 +64,16 @@ export class AuthService {
       token,
     );
     return { accessToken, refreshToken };
+  }
+
+  async logout(req: Request): Promise<void> {
+    const jwtToken = this.tokenService.getTokenFromBearer(req);
+    const dbToken = await this.tokenService.getDBTokenByAccessToken(jwtToken);
+    if (!dbToken) {
+      throw new NotFoundException('Token not found in database');
+    }
+    const { accessToken, refreshToken } = dbToken;
+    await this.tokenService.addTokenToBlacklist(accessToken, refreshToken);
+    await this.tokenService.removeToken(dbToken);
   }
 }
