@@ -6,16 +6,24 @@ import { JwtModuleConfig } from '@Core/config';
 
 import { AuthController } from './controllers';
 import { AuthService, TokenService } from './services';
-import { Token } from './entities';
-import { TokenRepository } from './repositories';
+import { Blacklist, Token } from './entities';
+import { BlacklistRepository, TokenRepository } from './repositories';
 import { JwtStrategy } from './strategies';
+import { TokenListener } from './listeners';
 
 @Module({
   imports: [
     JwtModule.registerAsync(JwtModuleConfig),
-    TypeOrmModule.forFeature([Token]),
+    TypeOrmModule.forFeature([Token, Blacklist]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, TokenService, TokenRepository, JwtStrategy],
+  providers: [
+    AuthService,
+    TokenService,
+    TokenRepository,
+    JwtStrategy,
+    TokenListener,
+    BlacklistRepository,
+  ],
 })
 export class AuthModule {}
