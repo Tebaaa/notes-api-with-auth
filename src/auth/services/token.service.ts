@@ -11,7 +11,7 @@ import { Request } from 'express';
 import { User } from '@Users/entities';
 
 import { BlacklistRepository, TokenRepository } from '../repositories';
-import { Token } from '../entities';
+import { Blacklist, Token } from '../entities';
 
 @Injectable()
 export class TokenService {
@@ -32,9 +32,6 @@ export class TokenService {
     try {
       return this.jwtService.sign(payload);
     } catch (err) {
-      console.log(err);
-      console.log(this.configService.get('ACCESS_TOKEN_SECRET'));
-
       throw new InternalServerErrorException(
         `Access token generation failed for ${user.email}`,
       );
@@ -124,5 +121,11 @@ export class TokenService {
 
   async removeToken(token: Token): Promise<void> {
     await this.tokenRepository.remove(token);
+  }
+
+  async getBlacklitedTokenByAccessToken(
+    accessToken: string,
+  ): Promise<Blacklist> {
+    return this.blacklistRepository.findOneByAccessToken(accessToken);
   }
 }

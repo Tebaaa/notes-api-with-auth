@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-
-import { TokenService } from '../services';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Request } from 'express';
-import { Token } from '@Auth/entities';
+
+import { TokenService } from '../services';
+import { Blacklist, Token } from '../entities';
 
 @Injectable()
 export class TokenListener implements Partial<TokenService> {
@@ -14,7 +14,6 @@ export class TokenListener implements Partial<TokenService> {
     if (!req) {
       throw new Error('No req parameter provided');
     }
-    console.log(req.headers.authorization);
     return this.tokenService.getTokenFromBearer(req);
   }
 
@@ -24,5 +23,15 @@ export class TokenListener implements Partial<TokenService> {
       throw new Error('No access token provided');
     }
     return this.tokenService.getDBTokenByAccessToken(accessToken);
+  }
+
+  @OnEvent('getBlacklistedTokenByAccessToken')
+  async getBlacklitedTokenByAccessToken(
+    accessToken: string,
+  ): Promise<Blacklist> {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+    return this.tokenService.getBlacklitedTokenByAccessToken(accessToken);
   }
 }

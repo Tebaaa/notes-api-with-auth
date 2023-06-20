@@ -14,16 +14,21 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const [jwt] = await this.eventEmitter.emitAsync('getTokenfromBearer', req);
+    const [accessToken] = await this.eventEmitter.emitAsync(
+      'getTokenfromBearer',
+      req,
+    );
     const [tokenExistsInDB] = await this.eventEmitter.emitAsync(
       'getDBTokenByAccessToken',
-      jwt,
+      accessToken,
     );
 
     // TODO: revisar en la blacklist :)
-    // const isBlacklisted = await this.blackListRepository.getToken(uti);
-    // if (!tokenExistsInDB || isBlacklisted) {
-    if (!tokenExistsInDB) {
+    const [isBlacklisted] = await this.eventEmitter.emitAsync(
+      'getBlacklistedTokenByAccessToken',
+      accessToken,
+    );
+    if (!tokenExistsInDB || isBlacklisted) {
       throw new UnauthorizedException('Invalid token');
     }
     return true;
