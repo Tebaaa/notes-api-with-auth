@@ -10,7 +10,7 @@ import { Request } from 'express';
 
 import { User } from '@Users/entities';
 
-import { TokenRepository } from '../repositories';
+import { BlacklistRepository, TokenRepository } from '../repositories';
 import { Token } from '../entities';
 
 @Injectable()
@@ -19,6 +19,7 @@ export class TokenService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly tokenRepository: TokenRepository,
+    private readonly blacklistRepository: BlacklistRepository,
   ) {}
 
   generateAccessToken(user: User): string {
@@ -84,14 +85,15 @@ export class TokenService {
 
   async refreshTokens(refreshToken: string): Promise<Token> {
     const token = await this.tokenRepository.getByRefreshToken(refreshToken);
-    //TODO: check if token is in blacklist
-    if (!token) {
+    const tokenInBlacklist =
+      await this.blacklistRepository.findOneByRefreshToken(refreshToken);
+    if (!token || tokenInBlacklist) {
       throw new UnauthorizedException('Invalid token');
     }
-    console.log(token);
     const { user } = token;
 
     await this.tokenRepository.delete({ id: token.id });
+    await this.addTokenToBlacklist(token.accessToken, token.refreshToken);
     return this.persistTokens(user);
   }
 
@@ -105,5 +107,22 @@ export class TokenService {
 
   async getDBTokenByAccessToken(accessToken: string): Promise<Token> {
     return this.tokenRepository.getByAccessToken(accessToken);
+  }
+
+  async addTokenToBlacklist(
+    accessToken: string,
+    refreshToken: string,
+  ): Promise<void> {
+    const alreadyExists = await this.blacklistRepository.findOneByAccessToken(
+      accessToken,
+    );
+    if (alreadyExists) {
+      return;
+    }
+    await this.blacklistRepository.save({ accessToken, refreshToken });
+  }
+
+  async removeToken(token: Token): Promise<void> {
+    await this.tokenRepository.remove(token);
   }
 }
