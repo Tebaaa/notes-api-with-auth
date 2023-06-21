@@ -26,12 +26,12 @@ export class TokenListener implements Partial<TokenService> {
   }
 
   @OnEvent('getBlacklistedTokenByAccessToken')
-  async getBlacklitedTokenByAccessToken(
+  async getBlacklistedTokenByAccessToken(
     accessToken: string,
   ): Promise<Blacklist> {
     if (!accessToken) {
       throw new Error('No access token provided');
     }
-    return this.tokenService.getBlacklitedTokenByAccessToken(accessToken);
+    return this.tokenService.getBlacklistedTokenByAccessToken(accessToken);
   }
 }

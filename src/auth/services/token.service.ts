@@ -123,7 +123,7 @@ export class TokenService {
     await this.tokenRepository.remove(token);
   }
 
-  async getBlacklitedTokenByAccessToken(
+  async getBlacklistedTokenByAccessToken(
     accessToken: string,
   ): Promise<Blacklist> {
     return this.blacklistRepository.findOneByAccessToken(accessToken);
