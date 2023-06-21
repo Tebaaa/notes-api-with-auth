@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseEntity } from '@Core/entities';
+import { Token } from '@Auth/entities';
 
 import { IUser } from '../interfaces';
 
@@ -23,4 +24,7 @@ export class User extends BaseEntity implements IUser {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Token, (token) => token.user)
+  tokens: Token[];
 }

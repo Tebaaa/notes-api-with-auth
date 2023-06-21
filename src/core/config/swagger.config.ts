@@ -5,7 +5,8 @@ export function setupSwaggerDoc(app: INestApplication): void {
   const config = new DocumentBuilder()
     .setTitle('My Project')
     .setDescription('Work in Progress')
-    .setVersion('1.0');
+    .setVersion('1.0')
+    .addBearerAuth();
 
   const document = SwaggerModule.createDocument(app, config.build());
   SwaggerModule.setup('docs', app, document, {

@@ -20,6 +20,7 @@
     "paths": {
       "@Core/*": ["src/core/*"],
       "@Users/*": ["src/users/*"],
+      "@Auth/*": ["src/auth/*"],
     }
   }
 }
