@@ -183,10 +183,12 @@ describe('TokenService', () => {
   describe('getBlacklistedTokenByAccessToken', () => {
     it('should get a blacklisted token from database', async () => {
       const expectedReturn = createMock<Blacklist>();
-      blacklistRepository.findOneByAccessToken(expectedReturn.accessToken);
+      blacklistRepository.findOneByAccessToken.mockResolvedValue(
+        expectedReturn,
+      );
 
       const returnedValue = await service.getBlacklistedTokenByAccessToken(
-        'fake-access-token',
+        expectedReturn.accessToken,
       );
 
       expect(returnedValue).toEqual(expectedReturn);
