@@ -4,6 +4,7 @@ import { BaseEntity } from '@Core/entities';
 import { Token } from '@Auth/entities';
 
 import { IUser } from '../interfaces';
+import { Note } from '@Notes/entities';
 
 @Entity()
 export class User extends BaseEntity implements IUser {
@@ -27,4 +28,7 @@ export class User extends BaseEntity implements IUser {
 
   @OneToMany(() => Token, (token) => token.user)
   tokens: Token[];
+
+  @OneToMany(() => Note, (note) => note.user)
+  notes: Note[];
 }
