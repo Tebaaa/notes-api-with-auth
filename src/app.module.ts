@@ -6,6 +6,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { DataSourceConfig } from './core/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { NotesModule } from './notes/notes.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRoot({ ...DataSourceConfig }),
     UsersModule,
     AuthModule,
+    NotesModule,
   ],
   controllers: [],
   providers: [],
