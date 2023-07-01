@@ -1,1 +1,1 @@
-export { ICurrentuser } from './current-user.interface';
+export { ICurrentUser } from './current-user.interface';
