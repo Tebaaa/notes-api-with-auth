@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { PaginationDto } from '@Core/dtos';
@@ -25,10 +25,10 @@ export class UsersRepository extends Repository<User> {
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    return this.repository.findOne({ where: { email } });
+    return this.repository.findOne({ where: { email: ILike(email) } });
   }
 
   async findOneByUsername(username: string): Promise<User> {
-    return this.repository.findOne({ where: { username } });
+    return this.repository.findOne({ where: { username: ILike(username) } });
   }
 }
