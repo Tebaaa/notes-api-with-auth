@@ -97,7 +97,9 @@ If no value is given, active notes will be retrieved.
 
   @ApiSingleResponse(NoteDoc)
   @ApiOperation({
-    description: `Use this endpoint to update a note's title and/or description`,
+    description: `Use this endpoint to update a note's title and/or description or change its status to archived/active.
+To archive a note, set isArchived=true.
+To unarchive a note, set isArchived=false.`,
     summary: 'Update a note',
   })
   @Patch(':id')

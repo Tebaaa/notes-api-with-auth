@@ -71,7 +71,7 @@ export class NotesService {
 
     if (updateNoteDto.title) {
       const newTitleInUse = await this.notesRepository.findOneNoteByTitle(
-        note.title,
+        updateNoteDto.title,
         currentUser,
       );
       if (newTitleInUse) {
@@ -85,7 +85,11 @@ export class NotesService {
     if (updateNoteDto.content) {
       note.content = updateNoteDto.content;
     }
-    return this.notesRepository.save({ id });
+
+    if (updateNoteDto.isArchived !== undefined) {
+      note.isArchived = updateNoteDto.isArchived;
+    }
+    return this.notesRepository.save(note);
   }
 
   async remove(id: string, currentUser: ICurrentUser): Promise<void> {

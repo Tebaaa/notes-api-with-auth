@@ -21,4 +21,8 @@ export class NoteDoc {
   @ApiProperty()
   @Expose()
   content: string;
+
+  @ApiProperty()
+  @Expose()
+  isArchived: boolean;
 }
