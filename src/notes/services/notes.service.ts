@@ -45,7 +45,10 @@ export class NotesService {
     isArchived: boolean,
     pagination: PaginationDto,
   ): Promise<[Note[], number]> {
-    return this.notesRepository.findAll(user, isArchived, pagination);
+    if (isArchived !== undefined) {
+      return this.notesRepository.findAll(user, isArchived, pagination);
+    }
+    return this.notesRepository.findAll(user, false, pagination);
   }
 
   async findOneById(id: string, currentUser: ICurrentUser): Promise<Note> {
