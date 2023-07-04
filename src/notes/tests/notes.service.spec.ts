@@ -3,12 +3,12 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
 import { ICurrentUser } from '@Core/interfaces';
+import { PaginationDto } from '@Core/dtos';
 
 import { NotesService } from '../services/notes.service';
 import { NotesRepository } from '../repositories';
 import { CreateNoteDto, UpdateNoteDto } from '../dto';
 import { Note } from '../entities';
-import { PaginationDto } from '@Core/dtos';
 
 describe('NotesService', () => {
   let service: NotesService;
