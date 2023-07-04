@@ -21,6 +21,7 @@
       "@Core/*": ["src/core/*"],
       "@Users/*": ["src/users/*"],
       "@Auth/*": ["src/auth/*"],
+      "@Notes/*": ["src/notes/*"],
     }
   }
 }

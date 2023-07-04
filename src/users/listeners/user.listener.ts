@@ -1,8 +1,9 @@
-import { CreateUserDto } from '@Users/dto';
-import { User } from '@Users/entities';
-import { UsersService } from '@Users/services';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+
+import { CreateUserDto } from '../dto';
+import { User } from '../entities';
+import { UsersService } from '../services';
 
 @Injectable()
 export class UserListener implements Partial<UsersService> {

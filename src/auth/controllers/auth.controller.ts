@@ -30,7 +30,6 @@ import { LoginInfoDoc, TokenDoc } from '../docs';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  //TODO: Implement local passport
   @ApiSingleResponse(LoginInfoDoc)
   @ApiOperation({
     description: 'User this endpoint to authenticate',
