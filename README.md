@@ -4,9 +4,9 @@
 
 ## Description
 
-The API is a NestJS application that provides services for note management and user authentication. It allows users to perform CRUD (Create, Read, Update, Delete) operations on notes and authenticate and authorize themselves within the application.
+This API is a NestJS application that provides services for note management and user authentication. It allows users to perform CRUD (Create, Read, Update, Delete) operations on notes and authenticate and authorize themselves within the application.
 
-The API offers the following key services:
+This API offers the following key services:
 
 - Authentication: Enables users to register and authenticate themselves using valid credentials.
 - Notes: Allows users to manage their notes, including creating, retrieving, updating, and deleting notes. Additionally, notes can be archived, changing their state from active to archived.
