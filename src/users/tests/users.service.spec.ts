@@ -1,9 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { describe } from 'node:test';
-
-import { PaginationDto } from '@Core/dtos';
 
 import { CreateUserDto, UpdateUserDto } from '../dto';
 import { UsersRepository } from '../repositories';
@@ -31,17 +28,6 @@ describe('UsersService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
-  });
-
-  describe('findAll', () => {
-    it('should return all users', async () => {
-      const expectedReturn = createMock<Promise<[User[], number]>>();
-
-      usersRepository.findAll.mockResolvedValueOnce(expectedReturn);
-
-      const returnedValue = await service.findAll(createMock<PaginationDto>());
-      expect(returnedValue).toEqual(expectedReturn);
-    });
   });
 
   describe('findOneById', () => {

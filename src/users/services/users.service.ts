@@ -5,8 +5,6 @@ import {
 } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
 
-import { PaginationDto } from '@Core/dtos';
-
 import { CreateUserDto, UpdateUserDto } from '../dto/';
 import { UsersRepository } from '../repositories';
 import { User } from '../entities';
@@ -14,10 +12,6 @@ import { User } from '../entities';
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
-
-  findAll(pagination: PaginationDto): Promise<[User[], number]> {
-    return this.usersRepository.findAll(pagination);
-  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { email, username, password } = createUserDto;
