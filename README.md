@@ -1,73 +1,81 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<h1 align="center">My Notes API</h1>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![NODE](https://img.shields.io/badge/NODE-18.13.0-8FC965?labelColor=5D9741&style=for-the-badge) ![NESTJS](https://img.shields.io/badge/NESTJS-9.4.2-389AD5?labelColor=31C4F3&style=for-the-badge) ![Docker Compose](https://img.shields.io/badge/Docker--compose-2.13.0-8FC965?labelColor=5D9741&style=for-the-badge) ![PG](https://img.shields.io/badge/Postgresql-15-389AD5?labelColor=31C4F3&style=for-the-badge) ![SWAGGER](https://img.shields.io/badge/SWAGGER-^6.3.0-8FC965?labelColor=5D9741&style=for-the-badge)
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This API is a NestJS application that provides services for note management and user authentication. It allows users to perform CRUD (Create, Read, Update, Delete) operations on notes and authenticate and authorize themselves within the application.
 
-## Installation
+This API offers the following key services:
 
-```bash
-$ npm install
-```
+- Authentication: Enables users to register and authenticate themselves using valid credentials.
+- Notes: Allows users to manage their notes, including creating, retrieving, updating, and deleting notes. Additionally, notes can be archived, changing their state from active to archived.
+- Note Archiving: The API provides functionality for archiving and unarchiving notes, allowing users to organize their notes based on their state.
 
-## Running the app
+The API utilizes a PostgreSQL database running in a Docker container. Environment variables are required to configure the database connection.
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
+## Initial configuration
+Before run the project, you must provide the following environment variables, it can be done using a .env file at project root directory:
 
 ```bash
-# unit tests
-$ npm run test
+NODE_ENV=<development|production>
+PORT=<Port_where_you_want_the_api_to_run>
 
-# e2e tests
-$ npm run test:e2e
+#Database
+DB_NAME=<Database_name_you_want_to_use>
+DB_USER=<Database_username_you_want_to_use>
+DB_PASSWORD=<Database_password>
+DB_HOST=<Database_host>
+DB_PORT=<Database_port>
 
-# test coverage
-$ npm run test:cov
+#Jwt
+ACCESS_TOKEN_SECRET=<Custom_secret>
+ACCESS_TOKEN_EXPIRATION=<Seconds_you_want_the_access_token_to_last>
+REFRESH_TOKEN_SECRET=<Custom_secret>
+REFRESH_TOKEN_EXPIRATION=<Seconds_you_want_the_refresh_token_to_last>
 ```
 
-## Support
+## Build & run database
+You'll need to have docker and docker-compose installed.
+At project root directory, run:
+```bash
+docker-compose up -d
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Run migrations
+With your database running, run:
+```bash
+npm run migration:run
+```
 
-## Stay in touch
+## How to run
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npm i
+npm run build
+npm run start
+```
 
-## License
+## Authentication
 
-Nest is [MIT licensed](LICENSE).
+The API uses JWT (JSON Web Tokens) for request authentication. Protected endpoints require including the JWT token in the Authorization header of the request.
+
+### Obtaining JWT Token
+
+To obtain a valid JWT token, you need to send an authentication request with user credentials to the following endpoint:
+
+```POST /api/v1/auth/login```
+
+
+The request should include the username and password in the request body. If the credentials are valid, you will receive a JWT token in the response.
+
+### Including JWT Token in Requests
+
+Once you have obtained a valid JWT token, you should include it in the Authorization header of protected requests. Make sure to use the "Bearer" prefix followed by the JWT token. Here's an example of how the authorization header should be included:
+
+```Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...```
+
+Remember that the JWT token has an expiration date and needs to be renewed periodically to keep the session active. If the token expires, you will need to request a new one through the login process.
+
+## For more information on the available endpoints and how to interact with the API, please refer to the automatically generated documentation at the /docs route once the application is running.

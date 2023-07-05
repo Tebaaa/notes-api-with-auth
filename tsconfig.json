@@ -16,6 +16,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@Core/*": ["src/core/*"],
+      "@Users/*": ["src/users/*"],
+      "@Auth/*": ["src/auth/*"],
+      "@Notes/*": ["src/notes/*"],
+    }
   }
 }
