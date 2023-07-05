@@ -3,23 +3,23 @@ import {
   Get,
   Body,
   Patch,
-  Param,
   Delete,
-  Query,
   HttpStatus,
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-
 import {
-  serializeMultipleResponse,
-  serializeSingleResponse,
-} from '@Core/utils';
-import { IdParamDto, PaginationDto } from '@Core/dtos';
-import { MultipleResponseDoc, SingleResponseDoc } from '@Core/docs';
-import { ApiPaginatedResponse, ApiSingleResponse } from '@Core/decorators';
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
 import { JwtAuthGuard } from '@Auth/guards';
+import { serializeSingleResponse } from '@Core/utils';
+import { SingleResponseDoc } from '@Core/docs';
+import { ApiSingleResponse, ReqUser } from '@Core/decorators';
+import { ICurrentUser } from '@Core/interfaces';
 
 import { UpdateUserDto } from '../dto';
 import { UsersService } from '../services';
@@ -27,54 +27,49 @@ import { UserDoc } from '../docs';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@ApiTags('User management endpoints')
-@Controller('users')
+@ApiTags('Profile management endpoints')
+@Controller('profile')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiPaginatedResponse(UserDoc)
+  @ApiSingleResponse(UserDoc)
   @ApiOperation({
-    description: 'Use this endpoint to retrieve users paginated',
-    summary: 'Get users',
+    description: 'Use this endpoint to retrieve your profile information',
+    summary: 'Get my user information',
   })
   @Get()
-  async findAll(
-    @Query() pagination: PaginationDto,
-  ): Promise<MultipleResponseDoc<UserDoc[]>> {
-    const [users, total] = await this.usersService.findAll(pagination);
-    return serializeMultipleResponse(UserDoc, users, pagination, total);
-  }
-
-  @ApiSingleResponse(UserDoc)
-  @ApiOperation({
-    description: 'Use this endpoint to find a user by a given ID',
-    summary: 'Get user by ID',
-  })
-  @Get(':id')
   async findOne(
-    @Param('id') id: IdParamDto,
+    @ReqUser() currentUser: ICurrentUser,
   ): Promise<SingleResponseDoc<UserDoc>> {
-    const user = await this.usersService.findOneById(id.id);
+    const user = await this.usersService.findOneById(currentUser.sub);
     return serializeSingleResponse(UserDoc, user);
   }
 
   @ApiSingleResponse(UserDoc)
   @ApiOperation({
-    description: 'Use this endpoint to update a user by a given ID',
-    summary: 'Update user',
+    description: 'Use this endpoint to update your profile information',
+    summary: 'Update profile ',
   })
-  @Patch(':id')
+  @Patch()
   async update(
-    @Param('id') id: IdParamDto,
+    @ReqUser() currentUser: ICurrentUser,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<SingleResponseDoc<UserDoc>> {
-    const user = await this.usersService.update(id.id, updateUserDto);
+    const user = await this.usersService.update(currentUser.sub, updateUserDto);
     return serializeSingleResponse(UserDoc, user);
   }
 
+  @ApiResponse({
+    content: null,
+    status: HttpStatus.NO_CONTENT,
+  })
+  @ApiOperation({
+    description: 'Use this endpoint to delete your profile',
+    summary: 'Delete profile ',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id')
-  async remove(@Param('id') id: IdParamDto): Promise<void> {
-    return await this.usersService.remove(id.id);
+  @Delete()
+  async remove(@ReqUser() currentUser: ICurrentUser): Promise<void> {
+    return await this.usersService.remove(currentUser.sub);
   }
 }
