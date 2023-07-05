@@ -25,17 +25,17 @@ export class AuthService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async login({ userNameOrEmail, password }: LoginDto): Promise<LoginInfoDoc> {
+  async login({ usernameOrEmail, password }: LoginDto): Promise<LoginInfoDoc> {
     let loggedInUser: unknown;
-    if (isEmail(userNameOrEmail)) {
+    if (isEmail(usernameOrEmail)) {
       [loggedInUser] = await this.eventEmitter.emitAsync(
         'getOneUserByEmail',
-        userNameOrEmail,
+        usernameOrEmail,
       );
     } else {
       [loggedInUser] = await this.eventEmitter.emitAsync(
         'getOneUserByUsername',
-        userNameOrEmail,
+        usernameOrEmail,
       );
     }
     if (!(loggedInUser instanceof User)) {
