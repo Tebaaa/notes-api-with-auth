@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export function setupSwaggerDoc(app: INestApplication): void {
   const config = new DocumentBuilder()
-    .setTitle('My Project')
+    .setTitle('My Notes')
     .setDescription(
       `This API is a NestJS application that provides services for note management and user authentication. It allows users to perform CRUD (Create, Read, Update, Delete) operations on notes and authenticate and authorize themselves within the application.
 

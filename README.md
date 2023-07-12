@@ -14,8 +14,16 @@ This API offers the following key services:
 
 The API utilizes a PostgreSQL database running in a Docker container. Environment variables are required to configure the database connection.
 
+## Testing the Deployed API
 
-## Initial configuration
+You can test the deployed API by visiting the following URL:
+
+[API Documentation](https://notes-api-with-auth.up.railway.app/docs)
+
+The documentation provides detailed information on the available endpoints and how to interact with the API. Feel free to explore and test the functionality of the API.
+
+
+## Initial configuration for local use
 Before run the project, you must provide the following environment variables, it can be done using a .env file at project root directory:
 
 ```bash
@@ -78,4 +86,4 @@ Once you have obtained a valid JWT token, you should include it in the Authoriza
 
 Remember that the JWT token has an expiration date and needs to be renewed periodically to keep the session active. If the token expires, you will need to request a new one through the login process.
 
-## For more information on the available endpoints and how to interact with the API, please refer to the automatically generated documentation at the /docs route once the application is running.
+## For more information on the available endpoints and how to interact with the API, please refer to the automatically generated documentation at the /docs route once the application is running or visit the 'API Documentation' link above in 'Testing the Deployed API' section.
