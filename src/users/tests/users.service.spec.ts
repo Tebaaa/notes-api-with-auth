@@ -93,7 +93,12 @@ describe('UsersService', () => {
 
         usersRepository.save.mockResolvedValueOnce(expectedReturn);
 
-        const returnedValue = await service.create(createMock<CreateUserDto>());
+        const returnedValue = await service.create(
+          createMock<CreateUserDto>({
+            password: 'Password$123',
+            confirmPassword: 'Password$123',
+          }),
+        );
         expect(returnedValue).toEqual(expectedReturn);
       });
     });
