@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmail } from 'class-validator';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import { Request } from 'express';
 
 import { CreateUserDto } from '@Users/dto';
@@ -60,9 +60,8 @@ export class AuthService {
 
   async refreshToken(token: string): Promise<TokenDoc> {
     this.tokenService.verifyRefreshToken(token);
-    const { accessToken, refreshToken } = await this.tokenService.refreshTokens(
-      token,
-    );
+    const { accessToken, refreshToken } =
+      await this.tokenService.refreshTokens(token);
     return { accessToken, refreshToken };
   }
 
