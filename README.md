@@ -44,8 +44,9 @@ REFRESH_TOKEN_SECRET=<Custom_secret>
 REFRESH_TOKEN_EXPIRATION=<Seconds_you_want_the_refresh_token_to_last>
 ```
 
-## Build & run database
-You'll need to have docker and docker-compose installed.
+## Build & run with Docker
+You'll need to have docker and docker-compose installed.<br>
+You must set `database` as value for `DB_HOST` in your .env file. <br>
 At project root directory, run:
 ```bash
 docker-compose up -d
@@ -57,7 +58,7 @@ With your database running, run:
 npm run migration:run
 ```
 
-## How to run
+## How to run locally
 
 ```bash
 npm i

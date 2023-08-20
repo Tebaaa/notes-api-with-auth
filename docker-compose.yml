@@ -1,6 +1,24 @@
 version: '3.8'
 
 services:
+  dev:
+    container_name: notes-api
+    image: notes-api:1.0.0
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - ${PORT}:3000
+      - 9229:9229
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on:
+     - database
   database:
     image: postgres:15
     container_name: database
@@ -15,4 +33,7 @@ services:
       - ./db/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
       - pgdata:/var/lib/postgresql/data
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - ${DB_PORT}:5432
+
+volumes:
+  pgdata:
