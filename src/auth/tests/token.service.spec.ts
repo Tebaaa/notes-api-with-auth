@@ -14,7 +14,6 @@ import { TokenService } from '../services';
 describe('TokenService', () => {
   let service: TokenService;
   let jwtService: DeepMocked<JwtService>;
-  let configService: DeepMocked<ConfigService>;
   let tokenRepository: DeepMocked<TokenRepository>;
   let blacklistRepository: DeepMocked<BlacklistRepository>;
 
@@ -43,7 +42,6 @@ describe('TokenService', () => {
 
     service = module.get<TokenService>(TokenService);
     jwtService = module.get(JwtService);
-    configService = module.get(ConfigService);
     tokenRepository = module.get(TokenRepository);
     blacklistRepository = module.get(BlacklistRepository);
   });
@@ -138,9 +136,8 @@ describe('TokenService', () => {
       const expectedReturn = createMock<Token>();
       tokenRepository.getByAccessToken.mockResolvedValue(expectedReturn);
 
-      const returnedValue = await service.getDBTokenByAccessToken(
-        'fake-jwt-token',
-      );
+      const returnedValue =
+        await service.getDBTokenByAccessToken('fake-jwt-token');
 
       expect(returnedValue).toEqual(expectedReturn);
     });
