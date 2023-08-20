@@ -1,0 +1,20 @@
+# Dependencies
+node_modules
+
+# Tests
+coverage
+
+# Git
+.git
+.gitignore
+README.md
+
+# Logs
+logs
+*.log
+
+# Other
+dist
+*Dockerfile*
+*docker-compose*
+*.env
